@@ -1,0 +1,84 @@
+services:
+  analisis_nginx:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    container_name: analisis_nginx
+    ports:
+      - 81:80
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - analisis_db
+      - analisis_app
+    networks:
+      - kuali_network
+  analisis_db:
+    image: mysql:latest
+    container_name : analisis_db
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: analisis
+      MYSQL_USER: analisis
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - kuali_network
+  analisis_app:
+    container_name: analisis_app
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - kuali_network
+    ports:
+      - "9001:9000"
+    
+  composer:
+    build:
+      context: .
+      dockerfile: composer.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - kuali_network
+  npm:
+    image: node:current-alpine
+    volumes:
+      - ./src:/var/www/html
+    entrypoint: ["npm"]
+    working_dir: /var/www/html
+    networks:
+      - kuali_network
+  artisan:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - analisis_db
+    entrypoint: ["php", "/var/www/html/artisan"]
+    networks:
+      - kuali_network
+  pint: 
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php", "/var/www/html/vendor/bin/pint"]
+    networks:
+      - kuali_network
+
+networks:
+  kuali_network:
+    external: true
