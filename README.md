@@ -18,10 +18,6 @@ un puntaje de que tanto encaja el usuario al puesto, este puntaje será de 0 a 1
     Copiar el archivo .env.example a .env
   </li>
 
-   <li>
-    Agregar en el .env las credenciales de rabbitmq
-  </li>
-
   <li>
     En el .env, en la variable POSTULACIONES_API_TOKEN, agregar el token obtenido al iniciar el servicio de postulaciones
   </li>
