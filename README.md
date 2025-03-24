@@ -31,7 +31,7 @@ un puntaje de que tanto encaja el usuario al puesto, este puntaje será de 0 a 1
   </li>
   
   <li>
-    Instalar composer: <b><i>docker-compose run --rm --user postulaciones composer install</i></b>
+    Instalar composer: <b><i>docker-compose run --rm --user analisis composer install</i></b>
   </li>
   
   <li> 
